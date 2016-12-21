@@ -1,0 +1,24 @@
+canvas {
+    border: 1px solid black;
+}
+
+.controls-group {
+    margin-top: 20px;
+    display: inline-block;
+    border: 1px solid #333;
+    padding: 5px 10px 10px;
+}
+
+.controls-group dt {
+    display: block;
+    padding-bottom: 10px;
+}
+
+.controls-group dd {
+    margin: 0 0 5px;
+}
+
+.controls-group input {
+    width: 30px;
+    text-align: center;
+}

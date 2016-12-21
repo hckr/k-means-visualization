@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>K-means algorithm visualization</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas width="800" height="600"></canvas>
+    <div class="controls">
+        <dl class="controls-group">
+            <dt>Data points</dt>
+            <dd><button id="add-data-points-manually" data-toggle="Turn off adding manually">Add manually</button></dd>
+            <dd><button>Add randomly</button> <input value="1"> data point(s)</dd>
+        </dl>
+        <dl class="controls-group">
+            <dt>Centroids</dt>
+            <dd><button id="add-centroids-manually" data-toggle="Turn off adding manually">Add manually</button></dd>
+            <dd><button>Add randomly</button> <input value="1"> centroid(s)</dd>
+        </dl>
+        <dl class="controls-group">
+            <dt>Algorithm actions</dt>
+            <dd><button id="reassign-data-points">Reassign data points</button></dd>
+            <dd><button id="update-centroids-positions">Update centroids' positions</button></dd>
+        </dl>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
