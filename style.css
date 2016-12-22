@@ -2,6 +2,11 @@ canvas {
     border: 1px solid black;
 }
 
+.canvas-picking-active {
+    cursor: crosshair;
+    border: 1px solid #38f;
+}
+
 .controls {
     display: flex;
     width: 800px;

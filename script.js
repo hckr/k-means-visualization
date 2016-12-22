@@ -24,18 +24,40 @@ let drawPoints = () => {
 let addingDataPointsManually = false,
     addingCentroidsManually = false;
 
+let buttonAddDataPointsManually = document.getElementById('add-data-points-manually'),
+    buttonAddCentroidsManually = document.getElementById('add-centroids-manually');
+
 let toggleButtonText = function(button) {
     let currentText = button.innerHTML;
     button.innerHTML = button.getAttribute('data-toggle');
     button.setAttribute('data-toggle', currentText);
 }
 
-document.getElementById('add-data-points-manually').addEventListener('click', function() {
-    addingDataPointsManually = !addingDataPointsManually;
-    toggleButtonText(this);
-}, false);
+let updateCanvasStyles = function() {
+    if (addingDataPointsManually || addingCentroidsManually) {
+        canvas.classList.add('canvas-picking-active');
+    } else {
+        canvas.classList.remove('canvas-picking-active');
+    }
+}
 
-document.getElementById('add-centroids-manually').addEventListener('click', function() {
+let toggleAddingDataPointsManually = function() {
+    if (addingCentroidsManually) {
+        toggleAddingCentroidsManually();
+    }
+    addingDataPointsManually = !addingDataPointsManually;
+    toggleButtonText(buttonAddDataPointsManually);
+    updateCanvasStyles();
+}
+
+let toggleAddingCentroidsManually = function() {
+    if (addingDataPointsManually) {
+        toggleAddingDataPointsManually();
+    }
     addingCentroidsManually = !addingCentroidsManually;
-    toggleButtonText(this);
-}, false);
+    toggleButtonText(buttonAddCentroidsManually);
+    updateCanvasStyles();
+}
+
+buttonAddDataPointsManually.addEventListener('click', toggleAddingDataPointsManually, false);
+buttonAddCentroidsManually.addEventListener('click', toggleAddingCentroidsManually, false);
