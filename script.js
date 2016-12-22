@@ -1,7 +1,7 @@
 let canvas = document.getElementsByTagName('canvas')[0],
     ctx = canvas.getContext('2d');
 
-let points = [];
+let dataPoints = [];
 
 let randInt = function(min, max) {
     if (arguments.length == 1) {
@@ -11,13 +11,16 @@ let randInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+let drawPoint = function([x, y]) {
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
 let drawPoints = () => {
     canvas.width = canvas.width;
-    for (let point of points) {
-        ctx.beginPath();
-        ctx.arc(point[0], point[1], 5, 0, 2 * Math.PI);
-        ctx.fill();
-        console.log(point);
+    for (let point of dataPoints) {
+        drawPoint(point);
     }
 }
 
@@ -61,3 +64,19 @@ let toggleAddingCentroidsManually = function() {
 
 buttonAddDataPointsManually.addEventListener('click', toggleAddingDataPointsManually, false);
 buttonAddCentroidsManually.addEventListener('click', toggleAddingCentroidsManually, false);
+
+let pointClickedOnCanvas = function(e) {
+    let canvasRect = canvas.getBoundingClientRect();
+    return [
+        e.clientX - canvasRect.left - 1,
+        e.clientY - canvasRect.top - 1
+    ];
+};
+
+canvas.addEventListener('click', function(e) {
+    if (addingDataPointsManually) {
+        let newPoint = pointClickedOnCanvas(e);
+        dataPoints.push(newPoint)
+        drawPoint(newPoint);
+    }
+}, false);
