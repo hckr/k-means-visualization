@@ -4,6 +4,19 @@ let canvas = document.getElementsByTagName('canvas')[0],
 let dataPoints = [],
     centroids = [];
 
+let colors = [
+    '#ED0A3F',
+    '#0095B7',
+    '#33CC99',
+    '#00468C',
+    '#0066FF',
+    '#EE34D2',
+    '#C88A65',
+    '#A50B5E',
+    '#733380',
+    '#87421F'
+]
+
 let drawDataPoint = function([x, y]) {
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
@@ -13,8 +26,11 @@ let drawDataPoint = function([x, y]) {
 let drawCentroid = function([x, y]) {
     ctx.save()
         ctx.beginPath();
-        ctx.arc(x, y, 8, 0, 2 * Math.PI);
-        ctx.stroke();
+        ctx.save()
+            ctx.lineWidth = 2;
+            ctx.arc(x, y, 8, 0, 2 * Math.PI);
+            ctx.stroke();
+        ctx.restore();
         ctx.beginPath();
         ctx.arc(x, y, 4, 0, 2 * Math.PI);
         ctx.fill();
@@ -76,14 +92,26 @@ let pointClickedOnCanvas = function(e) {
     ];
 };
 
+let addAndDrawNewCentroid = function(point) {
+    if (centroids.length >= colors.length) {
+        alert(`Sorry, reached limit of ${colors.length} colors.`);
+        return false;
+    }
+    centroids.push(point);
+    ctx.save();
+        ctx.strokeStyle = ctx.fillStyle = colors[centroids.length - 1]
+        drawCentroid(point);
+    ctx.restore();
+    return true;
+}
+
 canvas.addEventListener('click', function(e) {
     let newPoint = pointClickedOnCanvas(e);
     if (addingDataPointsManually) {
         dataPoints.push(newPoint)
         drawDataPoint(newPoint);
     } else if (addingCentroidsManually) {
-        centroids.push(newPoint)
-        drawCentroid(newPoint);
+        addAndDrawNewCentroid(newPoint);
     }
 }, false);
 
@@ -120,7 +148,7 @@ document.getElementById('add-centroids-randomly').addEventListener('click', func
                 randInt(0, canvas.height - 1)
             ];
         } while (newPoint in centroids);
-        centroids.push(newPoint);
-        drawCentroid(newPoint);
+        if(!addAndDrawNewCentroid(newPoint))
+            return;
     }
 }, false);

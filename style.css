@@ -15,8 +15,15 @@ canvas {
 }
 
 .controls input {
-    width: 30px;
     text-align: center;
+}
+
+#add-data-points-randomly-count {
+    width: 50px;
+}
+
+#add-centroids-randomly-count {
+    width: 30px;
 }
 
 .controls button {
