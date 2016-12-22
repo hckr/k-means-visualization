@@ -2,11 +2,34 @@ canvas {
     border: 1px solid black;
 }
 
-.controls-group {
-    margin-top: 20px;
-    display: inline-block;
+.controls {
+    display: flex;
+    width: 800px;
     border: 1px solid #333;
+    margin-top: 20px;
+}
+
+.controls input {
+    width: 30px;
+    text-align: center;
+}
+
+.controls button {
+    padding: 2px 5px;
+    border: 2px #333 outset;
+    cursor: hand;
+}
+
+.controls-group {
+    flex-grow: 1;
+    margin: 0;
+    display: inline-block;
+    border-right: 1px solid #333;
     padding: 5px 10px 10px;
+}
+
+.controls-group:last-child {
+    border-right-style: none;
 }
 
 .controls-group dt {
@@ -16,9 +39,4 @@ canvas {
 
 .controls-group dd {
     margin: 0 0 5px;
-}
-
-.controls-group input {
-    width: 30px;
-    text-align: center;
 }
