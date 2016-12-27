@@ -201,6 +201,22 @@ document.getElementById('reassign-data-points').addEventListener('click', functi
         });
         dataPointsAssignedCentroids[pointIndex] = closestCentroidIndex;
     });
-    console.log(dataPointsAssignedCentroids);
+    redrawAll();
+}, false);
+
+document.getElementById('update-centroids-positions').addEventListener('click', function() {
+    centroids.map((centroid, centroidIndex) => {
+        let assignedPoints = dataPoints.filter((_, pointIndex) => dataPointsAssignedCentroids[pointIndex] == centroidIndex),
+            sumX = 0,
+            sumY = 0;
+        if (assignedPoints.length == 0)
+            return;
+        assignedPoints.map(([x, y]) => {
+            sumX += x;
+            sumY += y;
+        });
+        centroid[0] = sumX / assignedPoints.length;
+        centroid[1] = sumY / assignedPoints.length;
+    });
     redrawAll();
 }, false);
