@@ -23,8 +23,9 @@ let drawDataPoint = function([x, y]) {
     ctx.fill();
 }
 
-let drawCentroid = function([x, y]) {
+let drawCentroid = function([x, y], index) {
     ctx.save()
+        ctx.strokeStyle = ctx.fillStyle = colors[index]
         ctx.beginPath();
         ctx.save()
             ctx.lineWidth = 2;
@@ -73,6 +74,10 @@ let toggleAddingDataPointsManually = function() {
 }
 
 let toggleAddingCentroidsManually = function() {
+    if (!addingCentroidsManually && isCentroidLimitReached()) {
+        showCentroidLimitReachedMessage();
+        return;
+    }
     if (addingDataPointsManually) {
         toggleAddingDataPointsManually();
     }
@@ -92,27 +97,32 @@ let pointClickedOnCanvas = function(e) {
     ];
 };
 
-let addAndDrawNewCentroid = function(point) {
-    if (centroids.length >= colors.length) {
-        alert(`Sorry, reached limit of ${colors.length} colors.`);
+let isCentroidLimitReached = () => centroids.length >= colors.length;
+
+let tryAddNewCentroid = function(point) {
+    if (isCentroidLimitReached()) {
         return false;
     }
     centroids.push(point);
-    ctx.save();
-        ctx.strokeStyle = ctx.fillStyle = colors[centroids.length - 1]
-        drawCentroid(point);
-    ctx.restore();
     return true;
+}
+
+let showCentroidLimitReachedMessage = function() {
+    // using timeout to show alert after canvas is refreshed
+    setTimeout(() => alert(`Sorry, reached limit of ${colors.length} colors.`), 10);
 }
 
 canvas.addEventListener('click', function(e) {
     let newPoint = pointClickedOnCanvas(e);
     if (addingDataPointsManually) {
-        dataPoints.push(newPoint)
-        drawDataPoint(newPoint);
+        dataPoints.push(newPoint);
     } else if (addingCentroidsManually) {
-        addAndDrawNewCentroid(newPoint);
+        if (!tryAddNewCentroid(newPoint)) {
+            showCentroidLimitReachedMessage();
+            toggleAddingCentroidsManually();
+        }
     }
+    redrawAll();
 }, false);
 
 let randInt = function(min, max) {
@@ -134,12 +144,13 @@ document.getElementById('add-data-points-randomly').addEventListener('click', fu
             ];
         } while (newPoint in centroids);
         dataPoints.push(newPoint);
-        drawDataPoint(newPoint);
     }
+    redrawAll();
 }, false);
 
 document.getElementById('add-centroids-randomly').addEventListener('click', function() {
-    let count = +document.getElementById('add-centroids-randomly-count').value;
+    let count = +document.getElementById('add-centroids-randomly-count').value,
+        limitReached = false;
     for (let i = 0; i < count; ++i) {
         let newPoint;
         do {
@@ -148,7 +159,13 @@ document.getElementById('add-centroids-randomly').addEventListener('click', func
                 randInt(0, canvas.height - 1)
             ];
         } while (newPoint in centroids);
-        if(!addAndDrawNewCentroid(newPoint))
-            return;
+        if (!tryAddNewCentroid(newPoint)) {
+            limitReached = true;
+            break;
+        }
+    }
+    redrawAll();
+    if (limitReached) {
+        showCentroidLimitReachedMessage();
     }
 }, false);
