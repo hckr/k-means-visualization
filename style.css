@@ -9,12 +9,22 @@ canvas {
 
 .controls {
     display: flex;
-    width: 800px;
+    width: 1024px;
     border: 1px solid #333;
-    margin-top: 20px;
+    margin-top: 10px;
+}
+
+.controls, .controls * {
+    font-size: 14px;
+}
+
+.controls dt {
+    font-size: 16px;
 }
 
 .controls input {
+    border: 1px none #666;
+    border-bottom-style: solid;
     text-align: center;
 }
 
