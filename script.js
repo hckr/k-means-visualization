@@ -2,7 +2,8 @@ let canvas = document.getElementsByTagName('canvas')[0],
     ctx = canvas.getContext('2d');
 
 let dataPoints = [],
-    centroids = [];
+    centroids = [],
+    dataPointsAssignedCentroids = {}; // { dataPointIndex: centroidIndex }
 
 let colors = [
     '#ED0A3F',
@@ -17,15 +18,18 @@ let colors = [
     '#87421F'
 ]
 
-let drawDataPoint = function([x, y]) {
-    ctx.beginPath();
-    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-    ctx.fill();
+let drawDataPoint = function([x, y], index) {
+    ctx.save();
+        ctx.fillStyle = colors[dataPointsAssignedCentroids[index]];
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+    ctx.restore();
 }
 
 let drawCentroid = function([x, y], index) {
     ctx.save()
-        ctx.strokeStyle = ctx.fillStyle = colors[index]
+        ctx.strokeStyle = ctx.fillStyle = colors[index];
         ctx.beginPath();
         ctx.save()
             ctx.lineWidth = 2;
@@ -177,5 +181,26 @@ document.getElementById('remove-all-data-points').addEventListener('click', func
 
 document.getElementById('remove-all-centroids').addEventListener('click', function() {
     centroids = [];
+    redrawAll();
+}, false);
+
+let distance = (point1, point2) => {
+    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
+};
+
+document.getElementById('reassign-data-points').addEventListener('click', function() {
+    dataPoints.map((point, pointIndex) => {
+        let smallestDistance = Number.MAX_SAFE_INTEGER,
+            closestCentroidIndex = undefined;
+        centroids.map((centroid, centroidIndex) => {
+            let dist = distance(point, centroid);
+            if (dist < smallestDistance) {
+                smallestDistance = dist;
+                closestCentroidIndex = centroidIndex;
+            }
+        });
+        dataPointsAssignedCentroids[pointIndex] = closestCentroidIndex;
+    });
+    console.log(dataPointsAssignedCentroids);
     redrawAll();
 }, false);
