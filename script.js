@@ -169,3 +169,13 @@ document.getElementById('add-centroids-randomly').addEventListener('click', func
         showCentroidLimitReachedMessage();
     }
 }, false);
+
+document.getElementById('remove-all-data-points').addEventListener('click', function() {
+    dataPoints = [];
+    redrawAll();
+}, false);
+
+document.getElementById('remove-all-centroids').addEventListener('click', function() {
+    centroids = [];
+    redrawAll();
+}, false);
