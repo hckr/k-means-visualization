@@ -30,15 +30,17 @@ let drawDataPoint = function([x, y], index) {
 let drawCentroid = function([x, y], index) {
     ctx.save()
         ctx.strokeStyle = ctx.fillStyle = colors[index];
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.save()
-            ctx.lineWidth = 2;
+        ctx.save();
             ctx.arc(x, y, 8, 0, 2 * Math.PI);
             ctx.stroke();
         ctx.restore();
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI);
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
         ctx.fill();
+        ctx.strokeStyle = 'white';
+        ctx.stroke();
     ctx.restore();
 }
 
@@ -176,11 +178,13 @@ document.getElementById('add-centroids-randomly').addEventListener('click', func
 
 document.getElementById('remove-all-data-points').addEventListener('click', function() {
     dataPoints = [];
+    dataPointsAssignedCentroids = {};
     redrawAll();
 }, false);
 
 document.getElementById('remove-all-centroids').addEventListener('click', function() {
     centroids = [];
+    dataPointsAssignedCentroids = {};
     redrawAll();
 }, false);
 
