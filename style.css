@@ -18,17 +18,14 @@ canvas {
     font-size: 14px;
 }
 
-.controls dt {
-    font-size: 16px;
-}
-
 .controls input {
     border: 1px none #666;
     border-bottom-style: solid;
     text-align: center;
 }
 
-#add-data-points-randomly-count {
+#add-data-points-randomly-count,
+#run-steps-in-loop-milliseconds {
     width: 50px;
 }
 
@@ -57,8 +54,17 @@ canvas {
 .controls-group dt {
     display: block;
     padding-bottom: 10px;
+    font-size: 16px;
 }
 
 .controls-group dd {
     margin: 0 0 5px;
+}
+
+.top-division:before {
+    content: '';
+    display: block;
+    margin-top: 10px;
+    border-top: 1px solid #333;
+    padding-top: 10px;
 }

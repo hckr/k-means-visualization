@@ -188,7 +188,7 @@ let distance = (point1, point2) => {
     return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
 };
 
-document.getElementById('reassign-data-points').addEventListener('click', function() {
+let reassignDataPoints = function() {
     dataPoints.map((point, pointIndex) => {
         let smallestDistance = Number.MAX_SAFE_INTEGER,
             closestCentroidIndex = undefined;
@@ -202,9 +202,10 @@ document.getElementById('reassign-data-points').addEventListener('click', functi
         dataPointsAssignedCentroids[pointIndex] = closestCentroidIndex;
     });
     redrawAll();
-}, false);
+};
+document.getElementById('reassign-data-points').addEventListener('click', reassignDataPoints, false);
 
-document.getElementById('update-centroids-positions').addEventListener('click', function() {
+let updateCentroidsPositions = function() {
     centroids.map((centroid, centroidIndex) => {
         let assignedPoints = dataPoints.filter((_, pointIndex) => dataPointsAssignedCentroids[pointIndex] == centroidIndex),
             sumX = 0,
@@ -219,4 +220,40 @@ document.getElementById('update-centroids-positions').addEventListener('click', 
         centroid[1] = sumY / assignedPoints.length;
     });
     redrawAll();
+};
+document.getElementById('update-centroids-positions').addEventListener('click', updateCentroidsPositions, false);
+
+let steps = [
+        reassignDataPoints,
+        updateCentroidsPositions
+    ],
+    currentStep,
+    nextAfter,
+    timeout,
+    loopRunning = false;
+
+let enqueNextStep = function(overrideAfter) {
+    let delay = overrideAfter != undefined ? overrideAfter : nextAfter;
+    timeout = setTimeout(() => {
+        steps[currentStep]();
+        currentStep = (currentStep + 1) % steps.length;
+        enqueNextStep();
+    }, delay);
+};
+
+document.getElementById('run-steps-in-loop').addEventListener('click', function() {
+    toggleButtonText(this);
+    if (!loopRunning) {
+        loopRunning = true;
+        currentStep = 0;
+        nextAfter = +document.getElementById('run-steps-in-loop-milliseconds').value;
+        if (isNaN(nextAfter) || nextAfter <= 0) {
+            alert('Wrong value!');
+            return;
+        }
+        enqueNextStep(0);
+    } else {
+        clearTimeout(timeout);
+        loopRunning = false;
+    }
 }, false);
