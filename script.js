@@ -14,6 +14,12 @@ let canvas = document.getElementsByTagName('canvas')[0],
         '#87421F'
     ],
 
+    distanceFunctions = {
+        "Euclidean": euclideanDistance,
+        "Manhattan": manhattanDistance
+    },
+    distance, // function (will be dynamically set)
+
     buttonAddDataPointsManually = document.getElementById('add-data-points-manually'),
     buttonAddDataPointsRandomly = document.getElementById('add-data-points-randomly'),
     buttonRemoveAllDataPoints = document.getElementById('remove-all-data-points'),
@@ -28,7 +34,10 @@ let canvas = document.getElementsByTagName('canvas')[0],
 
     inputAddDataPointsRandomlyCount = document.getElementById('add-data-points-randomly-count'),
     inputAddCentroidsRandomlyCount = document.getElementById('add-centroids-randomly-count'),
-    inputRunStepsInLoopMilliseconds = document.getElementById('run-steps-in-loop-milliseconds');
+    inputRunStepsInLoopMilliseconds = document.getElementById('run-steps-in-loop-milliseconds'),
+
+    selectDistanceFunction = document.getElementById('distance-function');
+
 
 canvas.addEventListener('click', (e) => addNewPoint(getPointClickedOnCanvas(e)), false);
 
@@ -44,6 +53,11 @@ buttonReassignDataPoints.addEventListener('click', reassignDataPoints, false);
 buttonUpdateCentroidsPositions.addEventListener('click', updateCentroidsPositions, false);
 buttonRunStepsInLoop.addEventListener('click', runStepsInLoop, false);
 
+fillDistanceFunctionSelect();
+changeDistanceFunction();
+selectDistanceFunction.addEventListener('change', changeDistanceFunction, false);
+
+
 let dataPoints = [],
     centroids = [],
     dataPointsAssignedCentroids = {}, // { dataPointIndex: centroidIndex }
@@ -57,6 +71,26 @@ let dataPoints = [],
     nextAfter,
     timeout,
     loopRunning = false;
+
+function euclideanDistance(point1, point2) {
+    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
+}
+
+function manhattanDistance(point1, point2) {
+    return Math.abs(point1[0] - point2[0]) + Math.abs(point1[1] - point2[1]);
+}
+
+function fillDistanceFunctionSelect() {
+    for (let name in distanceFunctions) {
+        let option = document.createElement('option');
+        option.value = option.innerHTML = name;
+        selectDistanceFunction.appendChild(option);
+    }
+}
+
+function changeDistanceFunction() {
+    distance = distanceFunctions[selectDistanceFunction.value];
+}
 
 function addNewPoint(point) {
     if (addingDataPointsManually) {
@@ -242,10 +276,6 @@ function randInt(min, max) {
 
 function isCentroidLimitReached() {
     return centroids.length >= colors.length;
-}
-
-function distance(point1, point2) {
-    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2));
 }
 
 function enqueNextStep(overrideAfter) {

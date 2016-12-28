@@ -21,10 +21,13 @@
             <dd><button id="remove-all-centroids">Remove all</button></dd>
         </dl>
         <dl class="controls-group">
-            <dt>Algorithm actions</dt>
+            <dt>Algorithm</dt>
             <dd>1. <button id="reassign-data-points">Reassign data points</button></dd>
             <dd>2. <button id="update-centroids-positions">Update centroids' positions</button></dd>
             <dd class="top-division"><button id="run-steps-in-loop" data-toggle="Stop running steps in loop">Run steps in loop</button> every <input id="run-steps-in-loop-milliseconds" value="1000"> millisecond(s)</dd>
+            <dd class="top-division"><label>Distance function:
+                <select id="distance-function"><!-- filled from JS --></select>
+            </label></dd>
         </dl>
     </div>
     <script src="script.js"></script>
