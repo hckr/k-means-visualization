@@ -1,3 +1,13 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    font-size: 28px;
+    width: 1024px;
+    text-align: center;
+}
+
 canvas {
     border: 1px solid black;
 }
@@ -22,6 +32,10 @@ canvas {
     border: 1px none #666;
     border-bottom-style: solid;
     text-align: center;
+}
+
+.controls input:focus {
+    border-color: #38f;
 }
 
 #add-data-points-randomly-count,
